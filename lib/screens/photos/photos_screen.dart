@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homephotos_app/components/main_nav_menu.dart';
 
 class PhotosScreen extends StatefulWidget {
   PhotosScreen({Key key, this.title}) : super(key: key);
@@ -16,7 +17,10 @@ class _PhotosScreenState extends State<PhotosScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-      )
+      ),
+      drawer: Drawer(
+        child: MainNavMenu.build(context),
+      ),
     );
   }
 }

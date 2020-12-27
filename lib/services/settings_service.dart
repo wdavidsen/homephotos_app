@@ -1,13 +1,31 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:homephotos_app/models/settings.dart';
+import 'package:homephotos_app/services/service_helper.dart';
 import 'package:http/http.dart' as http;
 
+import '../app_config.dart';
+
 class SettingsService {
-  static Future<String> exampleApi(String orgid) async {
+  static Future<Settings> getSettings() async {
     http.Response response = await http.get(
-      Uri.encodeFull("https://localhost:44375/api"),
+      "${AppConfig.apiUrl}/settings",
+      headers: ServiceHelper.secureHeaders,
     );
-    print("Response ${response.body.toString()}");
-    //Returns 'true' or 'false' as a String
-    return response.body;
+
+    var settings = Settings.fromJson(json.decode(response.body));
+    return settings;
+  }
+
+  static Future<void> updateSettings(Settings user, bool reprocessPhotos) async {
+    var url = "${AppConfig.apiUrl}/settings";
+
+    if (reprocessPhotos) {
+      url += '?reprocessPhotos=true';
+    }
+    await http.put(url,
+        headers: ServiceHelper.secureHeaders,
+        body: user
+    );
   }
 }

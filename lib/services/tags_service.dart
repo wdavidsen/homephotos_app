@@ -12,7 +12,7 @@ class TagsService {
   static Future<List<Tag>> getTags() async {
     final response = await http.get(
       "${AppConfig.apiUrl}/tags",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
 
     List<Tag> tags = json.decode(response.body);
@@ -22,7 +22,7 @@ class TagsService {
   static Future<List<Tag>> searchTags(String keywords) async {
     final response = await http.get(
       "${AppConfig.apiUrl}/tags/search?keywords=${Uri.encodeComponent(keywords)}",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
 
     List<Tag> tags = json.decode(response.body);
@@ -32,7 +32,7 @@ class TagsService {
   static Future<Tag> addTag(Tag tag) async {
     final response = await http.post(
       "${AppConfig.apiUrl}/tags",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: tag
     );
 
@@ -43,7 +43,7 @@ class TagsService {
   static Future<Tag> updateTag(Tag tag) async {
     final response = await http.put(
       "${AppConfig.apiUrl}/tags",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: tag
     );
 
@@ -54,14 +54,14 @@ class TagsService {
   static Future<void> deleteTag(int tagId) async {
     await http.delete(
       "${AppConfig.apiUrl}/tags/${tagId}",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
   }
 
   static Future<Tag> copyTag(int sourceTagId, String newTagName) async {
     final response = await http.put(
       "${AppConfig.apiUrl}/tags/copy",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: { "SourceTagId": sourceTagId, "newTagName": newTagName },
     );
 
@@ -72,7 +72,7 @@ class TagsService {
   static Future<Tag> mergeTags(List<int> sourceTagIds, String newTagName) async {
     final response = await http.put(
       "${AppConfig.apiUrl}/tags/merge",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: { "sourceTagIds": sourceTagIds, "newTagName": newTagName }
     );
 
@@ -83,7 +83,7 @@ class TagsService {
   static Future<List<TagState>> getPhotoTags(List<int> photoIds) async {
     final response = await http.post(
       "${AppConfig.apiUrl}/tags/batchTag}",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: photoIds
     );
 
@@ -94,7 +94,7 @@ class TagsService {
   static Future<Tag> updatePhotoTags(List<int> photoIds, List<TagState> tagStates) async {
     await http.put(
         "${AppConfig.apiUrl}/tags/batchTag",
-        headers: ServiceHelper.commonHeaders,
+        headers: ServiceHelper.secureHeaders,
         body: { "photoIds": photoIds, "tagStates": tagStates }
     );
   }

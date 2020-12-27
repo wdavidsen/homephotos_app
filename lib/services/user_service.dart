@@ -12,7 +12,7 @@ class UserService {
   static Future<User> get(int userId) async {
     final response = await http.get(
       "${AppConfig.apiUrl}/users/$userId",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
 
     User user = User.fromJson(json.decode(response.body));
@@ -22,7 +22,7 @@ class UserService {
   static Future<List<User>> getAll() async {
     final response = await http.get(
       "${AppConfig.apiUrl}/users",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
 
     List<Map<String, dynamic>> list = json.decode(response.body);
@@ -37,7 +37,7 @@ class UserService {
   static Future<void> delete(int userId) async {
     await http.delete(
       "${AppConfig.apiUrl}/users/${userId}",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
   }
 
@@ -46,7 +46,7 @@ class UserService {
 
     response = await http.post(
       "${AppConfig.apiUrl}/users",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: user
     );
     User u = User.fromJson(json.decode(response.body));
@@ -58,7 +58,7 @@ class UserService {
 
     response = await http.put(
         "${AppConfig.apiUrl}/users",
-        headers: ServiceHelper.commonHeaders,
+        headers: ServiceHelper.secureHeaders,
         body: user
     );
     User u = User.fromJson(json.decode(response.body));

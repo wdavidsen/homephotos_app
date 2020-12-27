@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:homephotos_app/app_config.dart';
-import 'package:homephotos_app/main.dart';
 import 'package:homephotos_app/models/password_change.dart';
 import 'package:homephotos_app/models/tokens.dart';
 import 'package:homephotos_app/models/user.dart';
@@ -13,7 +12,7 @@ class AuthService {
   static Future<User> login(String username, String password) async {
     final response = await http.post(
       "${AppConfig.apiUrl}/auth/login",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.nonsecureHeaders,
       body: json.encode({
         "username": username,
         "password": password
@@ -26,7 +25,7 @@ class AuthService {
   static Future<User> loginWithPasswordChange(PasswordChange changeInfo) async {
     final response = await http.post(
       "${AppConfig.apiUrl}/auth/loginWithPasswordChange",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.nonsecureHeaders,
       body: changeInfo
     );
     var user = User.fromJson(json.decode(response.body));
@@ -36,7 +35,7 @@ class AuthService {
   static Future<Tokens> refreshToken(User user) async {
     final response = await http.post(
     "${AppConfig.apiUrl}/auth/refresh",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: { "jwt": user.jwt, "refreshToken": user.refreshToken }
     );
     var tokens = Tokens.fromJson(json.decode(response.body));
@@ -44,9 +43,9 @@ class AuthService {
   }
 
   static Future<void> logout(User user) async {
-    final response = await http.post(
+    await http.post(
       "${AppConfig.apiUrl}/auth/logout",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: { "refreshToken": user.refreshToken }
     );
   }

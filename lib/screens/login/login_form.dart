@@ -14,11 +14,17 @@ class LoginForm extends StatefulWidget {
 
 class LoginFormState extends State<LoginForm> {
   LoginBloc _bloc;
+  String test;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _bloc = BlocProvider.of(context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -135,7 +141,8 @@ class LoginFormState extends State<LoginForm> {
     _bloc.showProgressBar(true);
     _bloc.submit().then((success) {
       if (success) {
-        Navigator.of(context).pushNamed('/photos');
+        Navigator.of(context).pushNamed('/settings');
+        // Navigator.of(context).pushReplacementNamed('/photos');
       }
       else {
         showErrorMessage('Login failed');

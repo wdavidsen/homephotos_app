@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:homephotos_app/bloc/bloc.dart';
+import 'package:homephotos_app/blocs/auth-bloc.dart';
 import 'package:homephotos_app/services/auth_service.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -64,6 +65,7 @@ class LoginBloc extends Bloc {
   Future<bool> submit() async {
     try {
       var user = await AuthService.login(_username.value, _password.value);
+      AuthBloc.setCurrentUser(user);
       return true;
     }
     catch (error) {

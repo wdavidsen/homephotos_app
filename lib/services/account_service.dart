@@ -8,14 +8,12 @@ import 'package:homephotos_app/models/user.dart';
 import 'package:homephotos_app/services/service_helper.dart';
 import 'package:http/http.dart' as http;
 
-import 'auth_service.dart';
-
 class AccountService {
 
   static Future<void> register(User user) async {
     await http.post(
         "https://localhost:44375/api/account/register",
-        headers: ServiceHelper.commonHeaders,
+        headers: ServiceHelper.nonsecureHeaders,
         body: user
     );
   }
@@ -23,7 +21,7 @@ class AccountService {
   static Future<Tokens> changePassword(PasswordChange changeInfo) async {
     final response = await http.post(
       "${AppConfig.apiUrl}/account/changePassword",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: changeInfo
     );
 
@@ -34,7 +32,7 @@ class AccountService {
   static Future<AccountInfo> info() async {
     final response = await http.get(
       "${AppConfig.apiUrl}/account",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
     );
 
     AccountInfo info = AccountInfo.fromJson(json.decode(response.body));
@@ -44,7 +42,7 @@ class AccountService {
   static Future<void> update(AccountInfo accountInfo) async {
     await http.put(
       "${AppConfig.apiUrl}/account",
-      headers: ServiceHelper.commonHeaders,
+      headers: ServiceHelper.secureHeaders,
       body: accountInfo
     );
   }

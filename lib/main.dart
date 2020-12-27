@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:homephotos_app/app_config.dart';
+import 'package:homephotos_app/init.dart';
 import 'package:homephotos_app/routes.dart';
-import 'package:homephotos_app/screens/home/home_screen.dart';
+import 'package:homephotos_app/screens/login/login_screen.dart';
+import 'package:homephotos_app/splash_screen.dart';
 import 'package:homephotos_app/themes/style.dart';
 
 import 'bloc/bloc-prov-tree.dart';
@@ -17,6 +19,7 @@ void main({String env}) async {
 }
 
 class MyApp extends StatelessWidget {
+  final Future _initFuture = Init.initialize();
 
   MyApp({Key key}) : super(key: key);
 
@@ -30,8 +33,18 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'ePhotoBox',
         theme: appTheme(),
-        initialRoute: '/login',
         routes: routes,
+        home: FutureBuilder(
+          future: _initFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done){
+              return LoginScreen();
+            }
+            else {
+              return SplashScreen();
+            }
+          },
+        ),
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class Settings {
   String cacheFolder;
   String mobileUploadsFolder;
@@ -24,7 +22,7 @@ class Settings {
     : cacheFolder = json['cacheFolder'],
       mobileUploadsFolder = json['mobileUploadsFolder'],
       indexPath = json['indexPath'],
-      nextIndexTime = json['nextIndexTime'],
+      nextIndexTime = DateTime.parse(json['nextIndexTime']),
       indexFrequencyHours = json['indexFrequencyHours'],
       smallImageSize = json['smallImageSize'],
       largeImageSize = json['largeImageSize'],

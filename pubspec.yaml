@@ -30,6 +30,9 @@ dependencies:
   cupertino_icons: ^1.0.0
   http: any
   rxdart: ^0.20.0
+  sembast: ^2.4.3
+  get_it: ^4.0.2
+  path_provider: ^1.6.7
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,7 @@ flutter:
     - assets/config/
     - assets/img/logo-lg.png
     - assets/img/logo-sm.png
+    - assets/img/fundo.jpg
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
