@@ -50,7 +50,7 @@ class LoginFormState extends State<LoginForm> {
 
   Widget usernameField() {
     return StreamBuilder(
-        stream: _bloc.username,
+        // stream: _bloc.username,
         builder: (context, snapshot) {
           return TextField(
             onChanged: _bloc.changeUsername,
@@ -68,7 +68,7 @@ class LoginFormState extends State<LoginForm> {
 
   Widget passwordField() {
     return StreamBuilder(
-        stream: _bloc.password,
+        // stream: _bloc.password,
         builder: (context, AsyncSnapshot<String> snapshot) {
           return TextField(
             onChanged: _bloc.changePassword,
@@ -88,7 +88,7 @@ class LoginFormState extends State<LoginForm> {
 
   Widget loginButton() {
     return StreamBuilder(
-        stream: _bloc.signInStatus,
+        // stream: _bloc.signInStatus,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           // if (!snapshot.hasData || snapshot.hasError) {
           //

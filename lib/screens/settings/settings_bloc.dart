@@ -19,14 +19,14 @@ class SettingsBloc extends Bloc {
   final _largeImageSize = BehaviorSubject<int>();
   final _thumbnailSize = BehaviorSubject<int>();
 
-  Observable<String> get cacheFolder => _cacheFolder.stream;
-  Observable<String> get mobileUploadsFolder => _mobileUploadsFolder.stream;
-  Observable<String> get indexPath => _indexPath.stream;
-  Observable<DateTime> get nextIndexTime => _nextIndexTime.stream;
-  Observable<int> get indexFrequencyHours => _indexFrequencyHours.stream;
-  Observable<int> get smallImageSize => _smallImageSize.stream;
-  Observable<int> get largeImageSize => _largeImageSize.stream;
-  Observable<int> get thumbnailSize => _thumbnailSize.stream;
+  // Observable<String> get cacheFolder => _cacheFolder.stream;
+  // Observable<String> get mobileUploadsFolder => _mobileUploadsFolder.stream;
+  // Observable<String> get indexPath => _indexPath.stream;
+  // Observable<DateTime> get nextIndexTime => _nextIndexTime.stream;
+  // Observable<int> get indexFrequencyHours => _indexFrequencyHours.stream;
+  // Observable<int> get smallImageSize => _smallImageSize.stream;
+  // Observable<int> get largeImageSize => _largeImageSize.stream;
+  // Observable<int> get thumbnailSize => _thumbnailSize.stream;
 
   Function(String) get changeCacheFolder => _cacheFolder.sink.add;
   Function(String) get changeMobileUploadsFolder => _mobileUploadsFolder.sink.add;

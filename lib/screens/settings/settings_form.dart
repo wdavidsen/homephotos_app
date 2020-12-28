@@ -46,7 +46,7 @@ class _SettingsFormState extends State<SettingsForm> {
 
   Widget indexPathField() {
     return StreamBuilder(
-      stream: _bloc.indexPath,
+      // stream: _bloc.indexPath,
       builder: (context, snapshot) {
         return TextField(
           onChanged: _bloc.changeIndexPath,
@@ -64,7 +64,7 @@ class _SettingsFormState extends State<SettingsForm> {
 
   Widget cacheFolderField() {
     return StreamBuilder(
-      stream: _bloc.cacheFolder,
+      //stream: _bloc.cacheFolder,
       builder: (context, snapshot) {
         return TextField(
           onChanged: _bloc.changeCacheFolder,
@@ -82,7 +82,7 @@ class _SettingsFormState extends State<SettingsForm> {
 
   Widget mobileUploadsFolderField() {
     return StreamBuilder(
-      stream: _bloc.mobileUploadsFolder,
+      //stream: _bloc.mobileUploadsFolder,
       builder: (context, snapshot) {
         return TextField(
           onChanged: _bloc.changeMobileUploadsFolder,

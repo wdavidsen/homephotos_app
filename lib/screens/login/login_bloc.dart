@@ -11,9 +11,9 @@ class LoginBloc extends Bloc {
 
   LoginBloc();
 
-  Observable<String> get username => _username.stream.transform(_validateUsername);
-  Observable<String> get password => _password.stream.transform(_validatePassword);
-  Observable<bool> get signInStatus => _isSignedIn.stream;
+  // Observable<String> get username => _username.stream.transform(_validateUsername);
+  // Observable<String> get password => _password.stream.transform(_validatePassword);
+  // Observable<bool> get signInStatus => _isSignedIn.stream;
 
   Function(String) get changeUsername => _username.sink.add;
   Function(String) get changePassword => _password.sink.add;
