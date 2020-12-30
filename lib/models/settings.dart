@@ -33,7 +33,7 @@ class Settings {
       'cacheFolder': cacheFolder,
       'mobileUploadsFolder': mobileUploadsFolder,
       'indexPath': indexPath,
-      'nextIndexTime': nextIndexTime,
+      'nextIndexTime': nextIndexTime.toString(),
       'indexFrequencyHours': indexFrequencyHours,
       'smallImageSize': smallImageSize,
       'largeImageSize': largeImageSize,

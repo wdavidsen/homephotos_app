@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homephotos_app/app_config.dart';
 import 'package:homephotos_app/init.dart';
 import 'package:homephotos_app/routes.dart';
-import 'package:homephotos_app/screens/login/login1_screen.dart';
-import 'package:homephotos_app/screens/login/login2_screen.dart';
-import 'package:homephotos_app/screens/login/login_screen.dart';
+import 'package:homephotos_app/screens/login/login_form_screen.dart';
 import 'package:homephotos_app/splash_screen.dart';
 import 'package:homephotos_app/themes/style.dart';
 
@@ -40,7 +38,7 @@ class MyApp extends StatelessWidget {
           future: _initFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done){
-              return Login1Screen();
+              return LoginFormScreen();
             }
             else {
               return SplashScreen();

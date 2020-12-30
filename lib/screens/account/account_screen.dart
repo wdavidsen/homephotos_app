@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homephotos_app/bloc/bloc-prov.dart';
 import 'package:homephotos_app/components/main_nav_menu.dart';
-import 'package:homephotos_app/screens/settings/settings_bloc.dart';
+import 'package:homephotos_app/screens/account/account_bloc.dart';
 
 import 'account_form.dart';
 
@@ -12,8 +12,8 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SettingsBloc>(
-        bloc: SettingsBloc(),
+    return BlocProvider<AccountBloc>(
+        bloc: AccountBloc(),
         child: Container(
           child: Scaffold(
             backgroundColor: Colors.white,

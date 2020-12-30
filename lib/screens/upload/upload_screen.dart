@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homephotos_app/bloc/bloc-prov.dart';
 import 'package:homephotos_app/components/main_nav_menu.dart';
-import 'package:homephotos_app/screens/settings/settings_bloc.dart';
+import 'package:homephotos_app/screens/upload/upload_bloc.dart';
 
 import 'upload_form.dart';
 
@@ -12,8 +12,8 @@ class UploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SettingsBloc>(
-        bloc: SettingsBloc(),
+    return BlocProvider<UploadBloc>(
+        bloc: UploadBloc(),
         child: Container(
           child: Scaffold(
             backgroundColor: Colors.white,

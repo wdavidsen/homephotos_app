@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class Photo {
   int photoId;
   DateTime dateTaken;
@@ -27,7 +25,7 @@ class Photo {
   Map<String, dynamic> toJson() =>
     {
       'photoId': photoId,
-      'dateTaken': dateTaken,
+      'dateTaken': dateTaken.toString(),
       'cacheFolder': cacheFolder,
       'fileName': fileName,
       'imageWidth': imageWidth,

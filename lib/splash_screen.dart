@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              color: Colors.black
+              color: Colors.black87
             ),
           ),
           SizedBox(height: 20),

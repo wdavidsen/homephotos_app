@@ -30,6 +30,6 @@ class AccountInfo {
       'firstName': firstName,
       'lastName': lastName,
       'role': role,
-      'lastLogin': lastLogin,
+      'lastLogin': lastLogin.toString(),
     };
 }

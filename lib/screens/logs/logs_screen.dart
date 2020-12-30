@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homephotos_app/bloc/bloc-prov.dart';
 import 'package:homephotos_app/components/main_nav_menu.dart';
-import 'package:homephotos_app/screens/settings/settings_bloc.dart';
+import 'package:homephotos_app/screens/logs/logs_bloc.dart';
 
 import 'logs_form.dart';
 
@@ -12,8 +12,8 @@ class LogsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SettingsBloc>(
-        bloc: SettingsBloc(),
+    return BlocProvider<LogsBloc>(
+        bloc: LogsBloc(),
         child: Container(
           child: Scaffold(
             backgroundColor: Colors.white,

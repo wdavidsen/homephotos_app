@@ -42,7 +42,7 @@ class User {
       'firstName': firstName,
       'lastName': lastName,
       'role': role,
-      'lastLogin': lastLogin,
+      'lastLogin': lastLogin.toString(),
       'jwt': jwt,
       'refreshToken': refreshToken,
       'failedLoginCount': failedLoginCount,
