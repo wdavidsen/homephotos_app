@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/bloc/bloc.dart';
-import 'package:homephotos_app/data/user_settings_repository.dart';
+import 'file:///C:/Repos/homephotos_app/lib/services/user_settings_repository.dart';
 import 'package:homephotos_app/models/user_settings.dart';
 
 class PrefBloc extends Bloc {

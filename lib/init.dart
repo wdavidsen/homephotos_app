@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
-import 'package:homephotos_app/data/user_settings_repository.dart';
-import 'package:homephotos_app/services/home_photos_service.dart';
+import 'file:///C:/Repos/homephotos_app/lib/services/user_settings_repository.dart';
+import 'package:homephotos_app/services/home_photos_client.dart';
+import 'package:homephotos_app/services/secure_storage_client.dart';
+import 'package:homephotos_app/services/user_store.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -15,6 +17,7 @@ class Init {
   static _registerServices() async {
     print("starting loading services");
     await _initSembast();
+    _initSecureStorage();
     _registerRepositories();
     _initApiClients();
     print("finished loading services");
@@ -34,8 +37,13 @@ class Init {
     GetIt.I.registerSingleton<Database>(database);
   }
 
+  static void _initSecureStorage() {
+    GetIt.I.registerSingleton<SecureStorageClient>(SecureStorageClient());
+    GetIt.I.registerSingleton<UserStore>(UserStore());
+  }
+
   static void _initApiClients() {
-    GetIt.I.registerSingleton<HomePhotosService>(HomePhotosService());
+    GetIt.I.registerSingleton<HomePhotosClient>(HomePhotosClient());
   }
 
   static _registerRepositories(){

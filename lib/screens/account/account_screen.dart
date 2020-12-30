@@ -6,9 +6,9 @@ import 'package:homephotos_app/screens/account/account_bloc.dart';
 import 'account_form.dart';
 
 class AccountScreen extends StatelessWidget {
-  AccountScreen({Key key, this.title}) : super(key: key);
-
   final String title;
+
+  AccountScreen({Key key, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

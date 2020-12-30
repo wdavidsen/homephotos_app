@@ -1,10 +1,11 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:homephotos_app/blocs/auth-bloc.dart';
-import 'package:homephotos_app/services/home_photos_service.dart';
+import 'package:homephotos_app/services/home_photos_client.dart';
+import 'package:homephotos_app/services/user_store.dart';
 
 class LoginFormBloc extends FormBloc<String, String> {
-  final HomePhotosService _homePhotosService = GetIt.I.get();
+  final HomePhotosClient _homePhotosService = GetIt.I.get();
+  final UserStore _userStore = GetIt.I.get();
 
   final username = TextFieldBloc(
     validators: [
@@ -31,8 +32,7 @@ class LoginFormBloc extends FormBloc<String, String> {
   void onSubmitting() async {
     try {
       var user = await _homePhotosService.login(username.value, password.value);
-      AuthBloc.setCurrentUser(user);
-
+      _userStore.setCurrentUser(user);
       emitSuccess();
     }
     catch (ex) {

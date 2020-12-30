@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 
 class User {
@@ -35,18 +37,23 @@ class User {
       mustChangePassword = json['mustChangePassword'],
       enabled = json['enabled'];
 
+  static User fromJsonString(String jsonString) => User.fromJson(json.decode(jsonString));
+
   Map<String, dynamic> toJson() =>
-    {
-      'userId': userId,
-      'username': username,
-      'firstName': firstName,
-      'lastName': lastName,
-      'role': role,
-      'lastLogin': lastLogin.toString(),
-      'jwt': jwt,
-      'refreshToken': refreshToken,
-      'failedLoginCount': failedLoginCount,
-      'mustChangePassword': mustChangePassword,
-      'enabled': enabled,
-    };
+      {
+        'userId': userId,
+        'username': username,
+        'firstName': firstName,
+        'lastName': lastName,
+        'role': role,
+        'lastLogin': lastLogin.toString(),
+        'jwt': jwt,
+        'refreshToken': refreshToken,
+        'failedLoginCount': failedLoginCount,
+        'mustChangePassword': mustChangePassword,
+        'enabled': enabled,
+      };
+
+  String toJsonString() => json.encode(toJson());
 }
+

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:homephotos_app/blocs/auth-bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/user.dart';
+import 'package:homephotos_app/services/user_store.dart';
 
 class MainNavMenu {
 
   static Widget build(BuildContext context) {
-    final user = AuthBloc.getCurrentUser();
+    final UserStore _userStore = GetIt.I.get();
+    final user = _userStore.getCurrentUser();
 
     return ListView(
         padding: EdgeInsets.all(0.0),

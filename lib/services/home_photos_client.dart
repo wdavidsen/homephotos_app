@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/app_config.dart';
-import 'package:homephotos_app/blocs/auth-bloc.dart';
 import 'package:homephotos_app/models/account_info.dart';
 import 'package:homephotos_app/models/password_change.dart';
 import 'package:homephotos_app/models/photo.dart';
@@ -11,19 +11,20 @@ import 'package:homephotos_app/models/tag.dart';
 import 'package:homephotos_app/models/tag_state.dart';
 import 'package:homephotos_app/models/tokens.dart';
 import 'package:homephotos_app/models/user.dart';
+import 'package:homephotos_app/services/user_store.dart';
 
-class HomePhotosService {
-  Dio api;
+class HomePhotosClient {
+  final Dio api = Dio();
+  final UserStore _userStore = GetIt.I.get();
 
-  HomePhotosService() {
-    this.api = Dio();
-
+  HomePhotosClient() {
     api.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
           options.headers['content-type'] = 'application/json';
           options.headers['accept'] = 'application/json';
-          final token = _getAccessToken();
-          if (token != null) {
+          final tokens = await _userStore.getTokens();
+          if (tokens != null) {
+            final token = tokens.jwt;
             options.headers['Authorization'] = 'Bearer $token';
           }
           return options;
@@ -51,7 +52,7 @@ class HomePhotosService {
     try {
       final response = await this.api.post(url, data: payload);
       final user = User.fromJson(response.data);
-      AuthBloc.setCurrentUser(user);
+      await _userStore.setCurrentUser(user);
       return user;
     }
     on DioError catch (e) {
@@ -364,14 +365,15 @@ class HomePhotosService {
 
   Future<void> _refreshExpiredToken() async {
     final url = "${AppConfig.apiUrl}/auth/refresh";
-    // await this._storage.read(key: 'refreshToken');
-    final response = await this.api.post(url, data: { "jwt": _getAccessToken(), "refreshToken": _getRefreshToken() });
+    final tokens = await _userStore.getTokens();
+    final response = await this.api.post(url, data: { "jwt": tokens.jwt, "refreshToken": tokens.refreshToken });
 
     if (response.statusCode != 200) {
       print('Failed to update token');
       return;
     }
-    AuthBloc.updateTokens(Tokens.fromJson(response.data));
+
+    await _userStore.updateTokens(Tokens.fromJson(response.data));
     print('Successfully updated token');
   }
 
@@ -386,13 +388,5 @@ class HomePhotosService {
         data: requestOptions.data,
         queryParameters: requestOptions.queryParameters,
         options: options);
-  }
-
-  String _getAccessToken() {
-    return AuthBloc.getCurrentUser()?.jwt;
-  }
-
-  String _getRefreshToken() {
-    return AuthBloc.getCurrentUser()?.refreshToken;
   }
 }

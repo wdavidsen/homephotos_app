@@ -1,10 +1,10 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/settings.dart';
-import 'package:homephotos_app/services/home_photos_service.dart';
+import 'package:homephotos_app/services/home_photos_client.dart';
 
 class SettingsFormBloc extends FormBloc<String, String> {
-  final HomePhotosService _homePhotosService = GetIt.I.get();
+  final HomePhotosClient _homePhotosService = GetIt.I.get();
 
   final photosFolder = TextFieldBloc();
   final cacheFolder = TextFieldBloc();
