@@ -5,7 +5,8 @@ import 'package:homephotos_app/init.dart';
 import 'package:homephotos_app/routes.dart';
 import 'package:homephotos_app/screens/login/login_form_screen.dart';
 import 'package:homephotos_app/screens/settings/settings_form_screen.dart';
-import 'package:homephotos_app/services/user_store.dart';
+import 'package:homephotos_app/services/navigator_service.dart';
+import 'package:homephotos_app/services/user_store_service.dart';
 import 'package:homephotos_app/splash_screen.dart';
 import 'package:homephotos_app/themes/style.dart';
 
@@ -35,13 +36,14 @@ class MyApp extends StatelessWidget {
         title: 'ePhotoBox',
         theme: appTheme(),
         routes: routes,
+        navigatorKey: NavigatorService.navigatorKey,
         home: FutureBuilder(
           future: _initFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              final UserStore _userStore = GetIt.I.get();
+              final UserStoreService _userStore = GetIt.I.get();
               if (_userStore.isLoggedIn()) {
-                return SettingsFormScreen();
+                return LoginFormScreen();
               }
               else {
                 return LoginFormScreen();

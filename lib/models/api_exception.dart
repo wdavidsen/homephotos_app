@@ -1,8 +1,8 @@
-class Problem {
+class ApiException implements Exception {
   int id;
   String message;
 
-  Problem.fromJson(Map<String, dynamic> json)
+  ApiException.fromJson(Map<String, dynamic> json)
     : id = json['id'],
       message = json['message'];
 

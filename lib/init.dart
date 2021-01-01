@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:homephotos_app/services/cookie_store_service.dart';
 import 'file:///C:/Repos/homephotos_app/lib/services/user_settings_repository.dart';
-import 'package:homephotos_app/services/home_photos_client.dart';
-import 'package:homephotos_app/services/secure_storage_client.dart';
-import 'package:homephotos_app/services/user_store.dart';
+import 'package:homephotos_app/services/homephotos_service.dart';
+import 'package:homephotos_app/services/navigator_service.dart';
+import 'package:homephotos_app/services/secure_storage_service.dart';
+import 'package:homephotos_app/services/user_store_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -17,6 +19,7 @@ class Init {
   static _registerServices() async {
     print("starting loading services");
     await _initSembast();
+    _intitNavigator();
     _initSecureStorage();
     _registerRepositories();
     _initApiClients();
@@ -37,13 +40,18 @@ class Init {
     GetIt.I.registerSingleton<Database>(database);
   }
 
+  static void _intitNavigator() {
+    GetIt.I.registerSingleton<NavigatorService>(NavigatorService());
+  }
+
   static void _initSecureStorage() {
-    GetIt.I.registerSingleton<SecureStorageClient>(SecureStorageClient());
-    GetIt.I.registerSingleton<UserStore>(UserStore());
+    GetIt.I.registerSingleton<SecureStorageService>(SecureStorageService());
+    GetIt.I.registerSingleton<UserStoreService>(UserStoreService());
+    GetIt.I.registerSingleton<CookieStoreService>(CookieStoreService());
   }
 
   static void _initApiClients() {
-    GetIt.I.registerSingleton<HomePhotosClient>(HomePhotosClient());
+    GetIt.I.registerSingleton<HomePhotosService>(HomePhotosService());
   }
 
   static _registerRepositories(){

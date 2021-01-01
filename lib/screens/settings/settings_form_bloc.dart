@@ -1,10 +1,10 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/settings.dart';
-import 'package:homephotos_app/services/home_photos_client.dart';
+import 'package:homephotos_app/services/homephotos_service.dart';
 
 class SettingsFormBloc extends FormBloc<String, String> {
-  final HomePhotosClient _homePhotosService = GetIt.I.get();
+  final HomePhotosService _homePhotosService = GetIt.I.get();
 
   final photosFolder = TextFieldBloc();
   final cacheFolder = TextFieldBloc();
@@ -37,10 +37,10 @@ class SettingsFormBloc extends FormBloc<String, String> {
   @override
   void onLoading() async {
     try {
+      await _homePhotosService.loadCsrfToken();
       var settings = await _homePhotosService.settingsGet();
 
       if (settings != null) {
-
         photosFolder.updateValue(settings.indexPath);
         cacheFolder.updateValue(settings.cacheFolder);
         mobileUploadsFolder.updateValue(settings.mobileUploadsFolder);
@@ -71,7 +71,6 @@ class SettingsFormBloc extends FormBloc<String, String> {
 
   @override
   void onSubmitting() async {
-
     try {
       var settings = Settings(
           indexPath: photosFolder.value,

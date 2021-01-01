@@ -21,7 +21,7 @@ class AccountInfo {
       firstName = json['firstName'],
       lastName = json['lastName'],
       role = json['role'],
-      lastLogin = json['lastLogin'];
+      lastLogin = DateTime.parse(json['lastLogin']);
 
   Map<String, dynamic> toJson() =>
     {

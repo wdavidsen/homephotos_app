@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SecureStorageClient {
+class SecureStorageService {
   final _storage = new FlutterSecureStorage();
 
   Future<String> read(String key) {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:homephotos_app/components/error_retry_message.dart';
 import 'package:homephotos_app/components/loading_dialog.dart';
 import 'package:homephotos_app/components/main_nav_menu.dart';
 import 'package:homephotos_app/screens/settings/settings_form_bloc.dart';
 
 class SettingsFormScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -50,30 +52,7 @@ class SettingsFormScreen extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     }
                     else if (state is FormBlocLoadFailed) {
-                      return Center(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.sentiment_dissatisfied, size: 70),
-                              SizedBox(height: 20),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  state.failureResponse ?? 'An error has occurred please try again later',
-                                  style: TextStyle(fontSize: 25),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                              RaisedButton(
-                                onPressed: loadingFormBloc.reload,
-                                child: Text('RETRY'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return ErrorRetryMessage.build(context, loadingFormBloc.reload, state.failureResponse);
                     }
                     else {
                       return SingleChildScrollView(
