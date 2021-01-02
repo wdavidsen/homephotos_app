@@ -19,7 +19,7 @@ class CookieStoreService {
     if (_cookies.containsKey(key)) {
       return _cookies[key];
     }
-    return null;
+    return '';
   }
 
   Future _loadCookies() async {
@@ -38,7 +38,7 @@ class CookieStoreService {
     var cookieStr = '';
 
     _cookies.forEach((key, value) {
-      cookieStr += '|${key}={value}';
+      cookieStr += '|${key}=${value}';
     });
 
     if (cookieStr.length > 0) {

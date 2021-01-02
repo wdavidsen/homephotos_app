@@ -22,6 +22,9 @@ class HomePhotosService {
   final UserStoreService _userStore = GetIt.I.get();
   final CookieStoreService _cookieStore = GetIt.I.get();
 
+  final String XSRF_Request_Token = 'XSRF-REQUEST-TOKEN';
+  final String XSRF_Token = '.AspNetCore.Antiforgery';
+
   HomePhotosService() {
     api.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
@@ -50,38 +53,42 @@ class HomePhotosService {
         }
       ));
 
-    // api.interceptors.add(InterceptorsWrapper(
-    //     onRequest: (options) async {
-    //       if (options.method == 'POST' || options.method == 'PUT') {
-    //         var cookieStr = _cookieStore.getCookie('CSRF');
-    //
-    //         if (cookieStr != null && cookieStr.isNotEmpty) {
-    //           options.headers["cookie"] = cookieStr;
-    //           // options.headers["X-XSRF-TOKEN"] = cookieStr.split(' ')[1].split('=')[1];
-    //           print('Added request cookies: ${cookieStr}');
-    //         }
-    //       }
-    //     },
-    //     onResponse: (options) async {
-    //       if (options.request.method == 'GET') {
-    //         final cookies = options.headers.map['set-cookie'] as List<String>;
-    //
-    //         if (cookies != null && cookies.isNotEmpty) {
-    //           var cookieStr = '';
-    //           cookies.forEach((value) {
-    //             var parts = value.split(';');
-    //             cookieStr += '; ${parts[0]}';
-    //           });
-    //
-    //           if (cookieStr.isNotEmpty) {
-    //             cookieStr = cookieStr.substring(2);
-    //           }
-    //           print('Extracted response cookies: ${cookieStr}');
-    //           _cookieStore.setCookie('CSRF', cookieStr);
-    //         }
-    //       }
-    //     }
-    //   ));
+    api.interceptors.add(InterceptorsWrapper(
+        onRequest: (options) async {
+          if (options.method == 'POST' || options.method == 'PUT') {
+            var csrfCookie = _cookieStore.getCookie(XSRF_Token);
+            var csrfRequestCookie = _cookieStore.getCookie(XSRF_Request_Token);
+
+            if (csrfCookie.isNotEmpty && csrfRequestCookie.isNotEmpty) {
+              csrfCookie = csrfCookie.split('; ')[0];
+              options.headers['cookie'] = csrfCookie;
+              print('Set CSRF cookie to: ${csrfCookie}');
+
+              csrfRequestCookie = csrfRequestCookie.split('; ')[0].split('=')[1];
+              options.headers['x-xsrf-token'] = csrfRequestCookie;
+              print('Set CSRF request header token to: ${csrfRequestCookie}');
+            }
+          }
+        },
+        onResponse: (options) async {
+          if (options.request.method == 'GET') {
+            final cookies = options.headers.map['set-cookie'] as List<String>;
+
+            if (cookies != null && cookies.isNotEmpty) {
+              cookies.forEach((value) {
+                if (value.startsWith(XSRF_Token)) {
+                  print('Lifted cookie: ${value}');
+                  _cookieStore.setCookie(XSRF_Token, value);
+                }
+                else if (value.startsWith(XSRF_Request_Token)) {
+                  print('Lifted cookie: ${value}');
+                  _cookieStore.setCookie(XSRF_Request_Token, value);
+                }
+              });
+            }
+          }
+        }
+      ));
   }
 
   Future<User> login(String username, String password) async {
