@@ -83,10 +83,18 @@ class AccountFormScreen extends StatelessWidget {
                                   children: <Widget>[
                                     RaisedButton(
                                       onPressed: loadingFormBloc.submit,
-                                      child: Text('Save Info'),
+                                      child: Text('Save'),
+                                    ),
+                                    RaisedButton(
+                                      onPressed: loadingFormBloc.changePassword,
+                                      child: Text('Change Password'),
+                                    ),
+                                    RaisedButton(
+                                      onPressed: loadingFormBloc.logout,
+                                      child: Text('Sign-Out'),
                                     ),
                                   ]
-                              )
+                              ),
                             ],
                           ),
                         ),

@@ -12,6 +12,10 @@ class NavigatorService {
     }
   }
 
+  Future<dynamic> navigateToLogin() {
+    return navigatorKey.currentState.pushNamedAndRemoveUntil("/login", (route) => false);
+  }
+
   void goBack() {
     return navigatorKey.currentState.pop();
   }

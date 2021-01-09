@@ -41,12 +41,13 @@ class HomePhotosService {
           if (error.response?.statusCode == 401) {
             if (!error.request.uri.path.endsWith('auth/refresh')) {
               print('Updating token with refresh token');
-              await _refreshExpiredToken();
-              return _retry(error.request);
-            }
-            else {
-              final NavigatorService _navService = GetIt.I.get();
-              _navService.navigateTo('/login', true);
+              if (await _refreshExpiredToken()) {
+                return _retry(error.request);
+              }
+              else {
+                final NavigatorService _navService = GetIt.I.get();
+                _navService.navigateTo('/login', true);
+              }
             }
           }
           return error.response;
@@ -104,7 +105,8 @@ class HomePhotosService {
       await _userStore.setCurrentUser(user);
       return user;
     }
-    on DioError catch (e) {
+    on DioError catch (e, s) {
+      print(s);
       _handleError(e);
     }
   }
@@ -118,6 +120,21 @@ class HomePhotosService {
       final user = User.fromJson(response.data);
       await _userStore.setCurrentUser(user);
       return user;
+    }
+    on DioError catch (e) {
+      _handleError(e);
+    }
+  }
+
+  Future logout() async {
+    final url = '${AppConfig.apiUrl}/auth/logout';
+    final payload = json.encode({
+      "refreshToken": _userStore.getTokens().refreshToken
+    });
+
+    try {
+      await this.api.post(url, data: payload);
+      await _userStore.clearCurrentUser();
     }
     on DioError catch (e) {
       _handleError(e);

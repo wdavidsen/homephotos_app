@@ -19,11 +19,19 @@ class LoginFormBloc extends FormBloc<String, String> {
     ],
   );
 
+  final services = SelectFieldBloc<String, Object>(
+    items: [],
+    validators: [
+      //FieldBlocValidators.required,
+    ],
+  );
+
   LoginFormBloc() {
     addFieldBlocs(
       fieldBlocs: [
         username,
         password,
+        services
       ],
     );
   }

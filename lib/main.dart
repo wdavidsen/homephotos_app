@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               final UserStoreService _userStore = GetIt.I.get();
               if (_userStore.isLoggedIn()) {
-                return LoginFormScreen();
+                return SettingsFormScreen();
               }
               else {
                 return LoginFormScreen();

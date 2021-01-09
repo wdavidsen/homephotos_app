@@ -52,10 +52,27 @@ class LoginFormScreen extends StatelessWidget {
                         prefixIcon: Icon(Icons.lock),
                       ),
                     ),
-                    RaisedButton(
-                      onPressed: loginFormBloc.submit,
-                      child: Text('Sign-In'),
+                    DropdownFieldBlocBuilder<String>(
+                      selectFieldBloc: loginFormBloc.services,
+                      decoration: InputDecoration(
+                        labelText: 'Service',
+                        prefixIcon: Icon(Icons.api),
+                      ),
+                      itemBuilder: (context, value) => value,
                     ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          RaisedButton(
+                            onPressed: loginFormBloc.submit,
+                            child: Text('Sign-In'),
+                          ),
+                          RaisedButton(
+                            onPressed: () => {},
+                            child: Text('Register'),
+                          ),
+                        ]
+                    )
                   ],
                 ),
               ),

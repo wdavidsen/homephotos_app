@@ -3,9 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/account_info.dart';
 import 'package:homephotos_app/models/api_exception.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
+import 'package:homephotos_app/services/navigator_service.dart';
 
 class AccountFormBloc extends FormBloc<String, String> {
   final HomePhotosService _homePhotosService = GetIt.I.get();
+  final NavigatorService _navService = GetIt.I.get();
 
   AccountInfo _accountInfo;
 
@@ -56,5 +58,14 @@ class AccountFormBloc extends FormBloc<String, String> {
     catch (e) {
       emitFailure(failureResponse: 'Failed to save account info');
     }
+  }
+
+  void changePassword() {
+
+  }
+
+  void logout() async {
+    await _homePhotosService.logout();
+    _navService.navigateToLogin();
   }
 }

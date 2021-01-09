@@ -25,6 +25,11 @@ class UserStoreService {
     _currentUser = user;
   }
 
+  Future clearCurrentUser() async {
+    await _secureStorage.write(_userKey, null);
+    _currentUser = null;
+  }
+
   Future updateTokens(Tokens tokens) async {
     final user = await getCurrentUser();
     await _secureStorage.write(_userKey, user.toJsonString());
