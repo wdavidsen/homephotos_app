@@ -10,10 +10,6 @@ import 'package:homephotos_app/services/user_store_service.dart';
 import 'package:homephotos_app/splash_screen.dart';
 import 'package:homephotos_app/themes/style.dart';
 
-import 'bloc/bloc-prov-tree.dart';
-import 'bloc/bloc-prov.dart';
-import 'blocs/pref-bloc.dart';
-
 void main({String env}) async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig.forEnvironment(env);
@@ -28,32 +24,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProviderTree(
-      blocProviders: <BlocProvider>[
-        BlocProvider<PrefBloc>(bloc: PrefBloc()),
-      ],
-      child: MaterialApp(
-        title: 'ePhotoBox',
-        theme: appTheme(),
-        routes: routes,
-        navigatorKey: NavigatorService.navigatorKey,
-        home: FutureBuilder(
-          future: _initFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              final UserStoreService _userStore = GetIt.I.get();
-              if (_userStore.isLoggedIn()) {
-                return SettingsFormScreen();
-              }
-              else {
-                return LoginFormScreen();
-              }
+    return MaterialApp(
+      title: 'ePhotoBox',
+      theme: appTheme(),
+      routes: routes,
+      navigatorKey: NavigatorService.navigatorKey,
+      home: FutureBuilder(
+        future: _initFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final UserStoreService _userStore = GetIt.I.get();
+            if (_userStore.isLoggedIn()) {
+              return SettingsFormScreen();
             }
             else {
-              return SplashScreen();
+              return LoginFormScreen();
             }
-          },
-        ),
+          }
+          else {
+            return SplashScreen();
+          }
+        },
       ),
     );
   }

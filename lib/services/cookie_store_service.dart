@@ -2,11 +2,12 @@ import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/services/secure_storage_service.dart';
 
 class CookieStoreService {
-  Map<String, String> _cookies;
   final String _cookiesKey = 'HOMEPHOTOS_COOKIES';
-  final SecureStorageService _secureStorage = GetIt.I.get();
+  Map<String, String> _cookies;
+  SecureStorageService _secureStorage;
 
   CookieStoreService()  {
+    _secureStorage = GetIt.I.get();
     Future.wait([_loadCookies()]);
   }
 

@@ -3,8 +3,13 @@ import 'package:homephotos_app/models/user_settings.dart';
 import 'package:sembast/sembast.dart';
 
 class UserSettingsRepository {
-  final Database _database = GetIt.I.get();
-  final StoreRef _store = intMapStoreFactory.store("user_settings");
+  Database _database;
+  StoreRef _store;
+
+  UserSettingsRepository() {
+    _database = GetIt.I.get();
+    _store = intMapStoreFactory.store("user_settings");
+  }
 
   Future<UserSettings> get() async {
     var snapshot = await _store.findFirst(_database);

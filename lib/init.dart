@@ -1,9 +1,11 @@
 import 'package:get_it/get_it.dart';
+import 'package:homephotos_app/models/user_settings.dart';
 import 'package:homephotos_app/services/cookie_store_service.dart';
-import 'file:///C:/Repos/homephotos_app/lib/services/user_settings_repository.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
+import 'package:homephotos_app/services/user_settings_repository.dart';
 import 'package:homephotos_app/services/navigator_service.dart';
 import 'package:homephotos_app/services/secure_storage_service.dart';
+import 'package:homephotos_app/services/user_settings_service.dart';
 import 'package:homephotos_app/services/user_store_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
@@ -12,8 +14,13 @@ import 'package:path/path.dart';
 
 class Init {
   static Future initialize() async {
-    await _registerServices();
-    await _loadSettings();
+    try {
+      await _registerServices();
+    }
+    catch (e) {
+      print("FAILED TO LOAD ALL SERVICES");
+      print(e);
+    }
   }
 
   static _registerServices() async {
@@ -21,15 +28,9 @@ class Init {
     await _initSembast();
     _intitNavigator();
     _initSecureStorage();
-    _registerRepositories();
+    _initUserSettings();
     _initApiClients();
     print("finished loading services");
-  }
-
-  static _loadSettings() async {
-    print("starting loading settings");
-    await Future.delayed(Duration(seconds: 5));
-    print("finished loading settings");
   }
 
   static Future _initSembast() async {
@@ -54,7 +55,9 @@ class Init {
     GetIt.I.registerSingleton<HomePhotosService>(HomePhotosService());
   }
 
-  static _registerRepositories(){
-    GetIt.I.registerLazySingleton<UserSettingsRepository>(() => UserSettingsRepository());
+  static void _initUserSettings() {
+    var repo = UserSettingsRepository();
+    GetIt.I.registerSingleton<UserSettingsRepository>(repo);
+    GetIt.I.registerSingleton<UserSettingsService>(UserSettingsService(userSettingsRepository: repo));
   }
 }

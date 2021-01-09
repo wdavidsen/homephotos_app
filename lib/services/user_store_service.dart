@@ -4,11 +4,12 @@ import 'package:homephotos_app/models/user.dart';
 import 'package:homephotos_app/services/secure_storage_service.dart';
 
 class UserStoreService {
-  User _currentUser;
   final String _userKey = 'HOMEPHOTOS_USER';
-  final SecureStorageService _secureStorage = GetIt.I.get();
+  User _currentUser;
+  SecureStorageService _secureStorage;
 
   UserStoreService() {
+    _secureStorage = GetIt.I.get();
     Future.wait([_loadUser()]);
   }
 

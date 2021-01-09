@@ -7,6 +7,7 @@ import 'package:homephotos_app/models/account_info.dart';
 import 'package:homephotos_app/models/api_exception.dart';
 import 'package:homephotos_app/models/password_change.dart';
 import 'package:homephotos_app/models/photo.dart';
+import 'package:homephotos_app/models/registration.dart';
 import 'package:homephotos_app/models/settings.dart';
 import 'package:homephotos_app/models/tag.dart';
 import 'package:homephotos_app/models/tag_state.dart';
@@ -65,9 +66,12 @@ class HomePhotosService {
               options.headers['cookie'] = csrfCookie;
               print('Set CSRF cookie to: ${csrfCookie}');
 
-              csrfRequestCookie = csrfRequestCookie.split('; ')[0].split('=')[1];
-              options.headers['x-xsrf-token'] = csrfRequestCookie;
-              print('Set CSRF request header token to: ${csrfRequestCookie}');
+              var cookieParts = csrfRequestCookie.split('; ');
+              if (cookieParts.length > 1) {
+                csrfRequestCookie = cookieParts[0].split('=')[1];
+                options.headers['x-xsrf-token'] = csrfRequestCookie;
+                print('Set CSRF request header token to: ${csrfRequestCookie}');
+              }
             }
           }
         },
@@ -90,6 +94,35 @@ class HomePhotosService {
           }
         }
       ));
+  }
+
+  Future<bool> pingService(String serviceUrl) async {
+    final url = "${serviceUrl}/ping";
+
+    try {
+      final response = await this.api.get(url);
+      _handleNonSuccessStatus(response);
+      return true;
+    }
+    on DioError catch (e) {
+      _handleError(e);
+    }
+  }
+
+  Future<bool> checkUsername(String username) async {
+    final url = "${AppConfig.apiUrl}/auth/usernameCheck";
+    final payload = json.encode({
+      "username": username
+    });
+
+    try {
+      final response = await this.api.post(url, data: payload);
+      _handleNonSuccessStatus(response);
+      return true;
+    }
+    on DioError catch (e) {
+      _handleError(e);
+    }
   }
 
   Future<User> login(String username, String password) async {
@@ -180,11 +213,12 @@ class HomePhotosService {
     }
   }
 
-  Future<void> register(User user) async {
+  Future<void> register(Registration registration) async {
     final url = "https://localhost:44375/api/account/register";
 
     try {
-      await this.api.post(url, data: user.toJson());
+      final response = await this.api.post(url, data: registration.toJson());
+      _handleNonSuccessStatus(response);
     }
     on DioError catch (e) {
       _handleError(e);
