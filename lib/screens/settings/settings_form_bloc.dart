@@ -50,18 +50,6 @@ class SettingsFormBloc extends FormBloc<String, String> {
         largePhotoSize.updateValue(settings.largeImageSize.toString());
         smallPhotoSize.updateValue(settings.smallImageSize.toString());
       }
-
-      // await Future<void>.delayed(Duration(milliseconds: 1500));
-
-      //   // Simulate network error
-      //   throw Exception('Network request failed. Please try again later.');
-
-      // text.updateInitialValue('I am prefilled');
-      //
-      // select
-      //   ..updateItems(['Option A', 'Option B', 'Option C'])
-      //   ..updateInitialValue('Option B');
-
       emitLoaded();
     }
     catch (e) {

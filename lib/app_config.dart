@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class AppConfig {
-  static String apiUrl;
+  static String somesetting;
 
   static Future<AppConfig> forEnvironment(String env) async {
     // set default to dev if nothing was passed
@@ -16,6 +16,6 @@ class AppConfig {
     // decode our json
     final json = jsonDecode(contents);
 
-    apiUrl = json['apiUrl'];
+    somesetting = json['apiUrl'];
   }
 }

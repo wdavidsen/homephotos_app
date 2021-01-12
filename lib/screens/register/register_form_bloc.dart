@@ -2,6 +2,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/api_exception.dart';
 import 'package:homephotos_app/models/registration.dart';
+import 'package:homephotos_app/models/service_info.dart';
 import 'package:homephotos_app/models/user.dart';
 import 'package:homephotos_app/models/user_settings.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
@@ -114,10 +115,10 @@ class RegisterFormBloc extends FormBloc<String, String> {
   }
 
   void _persistService(String serviceUrl) async {
-    var settings = await _userSettingsService.getSettings();
+    var settings = _userSettingsService.getSettings();
 
-    if (settings.services.indexOf(serviceUrl) < 0) {
-      settings.services.add(serviceUrl);
+    if (settings.services.any((s) => s.serviceUrl == serviceUrl)) {
+      settings.services.add(ServiceInfo(serviceName: serviceUrl, serviceUrl: serviceUrl));
     }
     _userSettingsService.saveSettings(settings);
   }

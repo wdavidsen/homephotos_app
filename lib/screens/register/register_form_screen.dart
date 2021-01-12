@@ -39,7 +39,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
-                title: Text('Wizard'),
+                title: Text('Register User'),
                 actions: <Widget>[
                   IconButton(
                       icon: Icon(_type == StepperType.horizontal

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/user_settings.dart';
 import 'package:sembast/sembast.dart';
@@ -24,7 +26,7 @@ class UserSettingsRepository {
     if (await this.get() != null) {
       throw 'User settings already established. Use the update method instead.';
     }
-    return await _store.add(_database, userSettings.toJson());
+    return await _store.add(_database, json.encode(userSettings.toJson()));
   }
 
   Future update(UserSettings userSettings) async {

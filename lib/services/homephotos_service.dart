@@ -14,6 +14,7 @@ import 'package:homephotos_app/models/tag_state.dart';
 import 'package:homephotos_app/models/tokens.dart';
 import 'package:homephotos_app/models/user.dart';
 import 'package:homephotos_app/services/navigator_service.dart';
+import 'package:homephotos_app/services/user_settings_service.dart';
 import 'package:homephotos_app/services/user_store_service.dart';
 
 import 'cookie_store_service.dart';
@@ -22,11 +23,14 @@ class HomePhotosService {
   final Dio api = Dio();
   final UserStoreService _userStore = GetIt.I.get();
   final CookieStoreService _cookieStore = GetIt.I.get();
+  final UserSettingsService _userSettingsService = GetIt.I.get();
 
   final String XSRF_Request_Token = 'XSRF-REQUEST-TOKEN';
   final String XSRF_Token = '.AspNetCore.Antiforgery';
 
-  HomePhotosService() {
+  String apiUrl = null;
+
+  HomePhotosService() {    
     api.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
           options.headers['content-type'] = 'application/json';
@@ -96,6 +100,16 @@ class HomePhotosService {
       ));
   }
 
+  String getApiUrl() {
+    if (this.apiUrl != null) {
+      return this.apiUrl;
+    }
+    final settings =  _userSettingsService.getSettings();
+    this.apiUrl = "${settings.currentServiceUrl}/api";
+    
+    return this.apiUrl;
+  }
+  
   Future<bool> pingService(String serviceUrl) async {
     final url = "${serviceUrl}/ping";
 
@@ -110,7 +124,7 @@ class HomePhotosService {
   }
 
   Future<bool> checkUsername(String username) async {
-    final url = "${AppConfig.apiUrl}/auth/usernameCheck";
+    final url = "${getApiUrl()}/auth/usernameCheck";
     final payload = json.encode({
       "username": username
     });
@@ -126,7 +140,7 @@ class HomePhotosService {
   }
 
   Future<User> login(String username, String password) async {
-    final url = '${AppConfig.apiUrl}/auth/login';
+    final url = '${getApiUrl()}/auth/login';
     final payload = json.encode({
       "username": username,
       "password": password
@@ -145,7 +159,7 @@ class HomePhotosService {
   }
 
   Future<User> loginWithPasswordChange(PasswordChange changeInfo) async {
-    final url = '${AppConfig.apiUrl}/auth/login';
+    final url = '${getApiUrl()}/auth/login';
     final payload = json.encode(changeInfo.toJson());
 
     try {
@@ -160,7 +174,7 @@ class HomePhotosService {
   }
 
   Future logout() async {
-    final url = '${AppConfig.apiUrl}/auth/logout';
+    final url = '${getApiUrl()}/auth/logout';
     final payload = json.encode({
       "refreshToken": _userStore.getTokens().refreshToken
     });
@@ -175,7 +189,7 @@ class HomePhotosService {
   }
 
   Future loadCsrfToken() async {
-    final url = "${AppConfig.apiUrl}/antiforgery";
+    final url = "${getApiUrl()}/antiforgery";
 
     try {
       await this.api.get(url);
@@ -186,7 +200,7 @@ class HomePhotosService {
   }
 
   Future<Settings> settingsGet() async {
-    final url = "${AppConfig.apiUrl}/settings";
+    final url = "${getApiUrl()}/settings";
 
     try {
       final response = await this.api.get(url);
@@ -199,7 +213,7 @@ class HomePhotosService {
   }
 
   Future<void> settingsUpdate(Settings settings, bool reprocessPhotos) async {
-    var url = "${AppConfig.apiUrl}/settings";
+    var url = "${getApiUrl()}/settings";
 
     if (reprocessPhotos) {
       url += '?reprocessPhotos=true';
@@ -226,7 +240,7 @@ class HomePhotosService {
   }
 
   Future<Tokens> changePassword(PasswordChange changeInfo) async {
-    final url = "${AppConfig.apiUrl}/account/changePassword";
+    final url = "${getApiUrl()}/account/changePassword";
 
     try {
       final response = await this.api.post(url, data: changeInfo.toJson());
@@ -239,7 +253,7 @@ class HomePhotosService {
   }
 
   Future<AccountInfo> accountGet() async {
-    final url = "${AppConfig.apiUrl}/account";
+    final url = "${getApiUrl()}/account";
 
     try {
       final response = await this.api.get(url);
@@ -252,7 +266,7 @@ class HomePhotosService {
   }
 
   Future<AccountInfo> accountUpdate(AccountInfo accountInfo) async {
-    final url = "${AppConfig.apiUrl}/account";
+    final url = "${getApiUrl()}/account";
 
     try {
       final response = await this.api.put(url, data: accountInfo.toJson());
@@ -266,7 +280,7 @@ class HomePhotosService {
   }
 
   Future<List<Photo>> photosGetLatest(int pageNum) async {
-    final url = "${AppConfig.apiUrl}/photos/latest?pageNum=${pageNum}";
+    final url = "${getApiUrl()}/photos/latest?pageNum=${pageNum}";
 
     try {
       final response = await this.api.get(url);
@@ -279,7 +293,7 @@ class HomePhotosService {
   }
 
   Future<List<Photo>> photosGetByTag(int pageNum, String tagName) async {
-    final url = "${AppConfig.apiUrl}/photos/byTag?pageNum=${pageNum}&tag=${Uri.encodeComponent(tagName)}";
+    final url = "${getApiUrl()}/photos/byTag?pageNum=${pageNum}&tag=${Uri.encodeComponent(tagName)}";
 
     try {
       final response = await this.api.get(url);
@@ -292,7 +306,7 @@ class HomePhotosService {
   }
 
   Future<List<Photo>> photosSearch(int pageNum, String keywords) async {
-    final url = "${AppConfig.apiUrl}/photos/search?pageNum=${pageNum}&keywords=${Uri.encodeComponent(keywords)}";
+    final url = "${getApiUrl()}/photos/search?pageNum=${pageNum}&keywords=${Uri.encodeComponent(keywords)}";
 
     try {
       final response = await this.api.get(url);
@@ -305,7 +319,7 @@ class HomePhotosService {
   }
 
   Future<Tag> tagAdd(Tag tag) async {
-    final url = "${AppConfig.apiUrl}/tags";
+    final url = "${getApiUrl()}/tags";
 
     try {
       final response = await this.api.post(url, data: tag.toJson());
@@ -318,7 +332,7 @@ class HomePhotosService {
   }
 
   Future<Tag> tagUpdate(Tag tag) async {
-    final url = "${AppConfig.apiUrl}/tags";
+    final url = "${getApiUrl()}/tags";
 
     try {
       final response = await this.api.put(url, data: tag.toJson());
@@ -331,7 +345,7 @@ class HomePhotosService {
   }
 
   Future<void> tagDelete(int tagId) async {
-    final url = "${AppConfig.apiUrl}/tags/${tagId}";
+    final url = "${getApiUrl()}/tags/${tagId}";
 
     try {
       await this.api.delete(url);
@@ -342,7 +356,7 @@ class HomePhotosService {
   }
 
   Future<Tag> tagCopy(int sourceTagId, String newTagName) async {
-    final url = "${AppConfig.apiUrl}/tags/copy";
+    final url = "${getApiUrl()}/tags/copy";
 
     try {
       final response = await this.api.put(url, data: { "sourceTagId": sourceTagId, "newTagName": newTagName });
@@ -355,7 +369,7 @@ class HomePhotosService {
   }
 
   Future<List<Tag>> tagsGet() async {
-    final url = "${AppConfig.apiUrl}/tags";
+    final url = "${getApiUrl()}/tags";
 
     try {
       final response = await this.api.get(url);
@@ -368,7 +382,7 @@ class HomePhotosService {
   }
 
   Future<List<Tag>> tagsSearch(String keywords) async {
-    final url = "${AppConfig.apiUrl}/tags/search?keywords=${Uri.encodeComponent(keywords)}";
+    final url = "${getApiUrl()}/tags/search?keywords=${Uri.encodeComponent(keywords)}";
 
     try {
       final response = await this.api.get(url);
@@ -381,7 +395,7 @@ class HomePhotosService {
   }
 
   Future<Tag> tagsMerge(List<int> sourceTagIds, String newTagName) async {
-    final url = "${AppConfig.apiUrl}/tags/merge";
+    final url = "${getApiUrl()}/tags/merge";
 
     try {
       final response = await this.api.put(url, data: { "sourceTagIds": sourceTagIds, "newTagName": newTagName });
@@ -394,7 +408,7 @@ class HomePhotosService {
   }
 
   Future<List<TagState>> tagsGetByPhotoIds(List<int> photoIds) async {
-    final url = "${AppConfig.apiUrl}/tags/batchTag}";
+    final url = "${getApiUrl()}/tags/batchTag}";
 
     try {
       final response = await this.api.post(url, data: photoIds);
@@ -407,7 +421,7 @@ class HomePhotosService {
   }
 
   Future<Tag> tagsUpdatePhotoTags(List<int> photoIds, List<TagState> tagStates) async {
-    final url = "${AppConfig.apiUrl}/tags/batchTag";
+    final url = "${getApiUrl()}/tags/batchTag";
 
     try {
       final response = await this.api.put(url, data: { "photoIds": photoIds, "tagStates": tagStates });
@@ -420,7 +434,7 @@ class HomePhotosService {
   }
 
   Future<User> userGet(int userId) async {
-    final url = "${AppConfig.apiUrl}/users/$userId";
+    final url = "${getApiUrl()}/users/$userId";
 
     try {
       final response = await this.api.get(url);
@@ -433,7 +447,7 @@ class HomePhotosService {
   }
 
   Future<User> userAdd(User user) async {
-    final url = "${AppConfig.apiUrl}/users";
+    final url = "${getApiUrl()}/users";
 
     try {
       final response = await this.api.post(url, data: user.toJson());
@@ -446,7 +460,7 @@ class HomePhotosService {
   }
 
   Future<User> userUpdate(User user) async {
-    final url = "${AppConfig.apiUrl}/users";
+    final url = "${getApiUrl()}/users";
 
     try {
       final response = await this.api.put(url, data: user.toJson());
@@ -459,7 +473,7 @@ class HomePhotosService {
   }
 
   Future<void> userDelete(int userId) async {
-    final url = "${AppConfig.apiUrl}/users/${userId}";
+    final url = "${getApiUrl()}/users/${userId}";
 
     try {
       await this.api.delete(url);
@@ -470,7 +484,7 @@ class HomePhotosService {
   }
 
   Future<List<User>> usersGet() async {
-    final url = "${AppConfig.apiUrl}/users";
+    final url = "${getApiUrl()}/users";
 
     try {
       final response = await this.api.get(url);
@@ -503,7 +517,7 @@ class HomePhotosService {
   }
 
   Future<bool> _refreshExpiredToken() async {
-    final url = "${AppConfig.apiUrl}/auth/refresh";
+    final url = "${getApiUrl()}/auth/refresh";
     final tokens = await _userStore.getTokens();
 
     final response = await this.api.post(url, data: { "jwt": tokens.jwt, "refreshToken": tokens.refreshToken });

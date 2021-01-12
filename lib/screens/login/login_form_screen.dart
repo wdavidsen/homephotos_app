@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:homephotos_app/components/loading_dialog.dart';
+import 'package:homephotos_app/models/service_info.dart';
 import 'package:homephotos_app/screens/settings/settings_form_screen.dart';
 
 import 'login_form_bloc.dart';
@@ -16,7 +17,7 @@ class LoginFormScreen extends StatelessWidget {
 
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(title: Text('Login')),
+            appBar: AppBar(title: Text('Sign-In')),
             body: FormBlocListener<LoginFormBloc, String, String>(
               onSubmitting: (context, state) {
                 LoadingDialog.show(context);
@@ -52,24 +53,34 @@ class LoginFormScreen extends StatelessWidget {
                         prefixIcon: Icon(Icons.lock),
                       ),
                     ),
-                    DropdownFieldBlocBuilder<String>(
+                    DropdownFieldBlocBuilder<ServiceInfo>(
                       selectFieldBloc: loginFormBloc.services,
                       decoration: InputDecoration(
                         labelText: 'Service',
                         prefixIcon: Icon(Icons.api),
                       ),
-                      itemBuilder: (context, value) => value,
+                      itemBuilder: (context, item) => item.serviceName,
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           RaisedButton(
                             onPressed: loginFormBloc.submit,
-                            child: Text('Sign-In'),
+                            color: Colors.blue,
+                            child: Text(
+                              'Sign-In',
+                              style: TextStyle(
+                                color: Colors.white
+                              )
+                            ),
                           ),
                           RaisedButton(
                             onPressed: () => Navigator.of(context).pushNamed("/register"),
-                            child: Text('Register'),
+                            child: Text('Register...'),
+                          ),
+                          RaisedButton(
+                            onPressed: () => Navigator.of(context).pushNamed("/services"),
+                            child: Text('Services...'),
                           ),
                         ]
                     )

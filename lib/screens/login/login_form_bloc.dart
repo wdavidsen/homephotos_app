@@ -1,5 +1,6 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:homephotos_app/models/service_info.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
 import 'package:homephotos_app/services/navigator_service.dart';
 import 'package:homephotos_app/services/user_settings_service.dart';
@@ -23,11 +24,11 @@ class LoginFormBloc extends FormBloc<String, String> {
     ],
   );
 
-  final services = SelectFieldBloc<String, Object>(
-    items: []
+  SelectFieldBloc<ServiceInfo, Object> services = SelectFieldBloc<ServiceInfo, Object>(
+      items: []
   );
 
-  LoginFormBloc() {
+  LoginFormBloc() : super(isLoading: true, isEditing: true) {
     addFieldBlocs(
       fieldBlocs: [
         username,
@@ -40,9 +41,13 @@ class LoginFormBloc extends FormBloc<String, String> {
   @override
   void onLoading() async {
     try {
-      final settings = await _userSettingsService.getSettings();
-      if (settings?.services != null) {
-        settings.services.forEach((item) => services.addItem(item));
+      final settings = _userSettingsService.getSettings();
+      final currentService = settings.services.firstWhere((item) => item.serviceUrl == settings.currentServiceUrl, orElse: () => null);
+
+      services.updateItems(settings.services);
+
+      if (currentService != null) {
+        services.updateInitialValue(currentService);
       }
       emitLoaded();
     }
@@ -55,7 +60,8 @@ class LoginFormBloc extends FormBloc<String, String> {
   void onSubmitting() async {
     try {
       var user = await _homePhotosService.login(username.value, password.value);
-      _userStore.setCurrentUser(user);
+      await _userStore.setCurrentUser(user);
+      await _userSettingsService.updateCurrentServiceInfo(services.value);
       emitSuccess();
     }
     catch (ex) {
