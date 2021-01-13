@@ -5,6 +5,7 @@ import 'package:homephotos_app/models/registration.dart';
 import 'package:homephotos_app/models/service_info.dart';
 import 'package:homephotos_app/models/user.dart';
 import 'package:homephotos_app/models/user_settings.dart';
+import 'package:homephotos_app/screens/custom_field_bloc_validators.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
 import 'package:homephotos_app/services/user_settings_service.dart';
 
@@ -25,7 +26,7 @@ class RegisterFormBloc extends FormBloc<String, String> {
   final password = TextFieldBloc(
     validators: [
       FieldBlocValidators.required,
-      FieldBlocValidators.passwordMin6Chars,
+      CustomFieldBlocValidators.passwordMin8Chars,
     ],
   );
 

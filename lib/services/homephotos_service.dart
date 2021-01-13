@@ -123,6 +123,34 @@ class HomePhotosService {
     }
   }
 
+  Future<Settings> indexNow(bool reprocessPhotos) async {
+    var url = "${getApiUrl()}/settings/indexNow";
+
+    if (reprocessPhotos) {
+      url += '?reprocessPhotos=' + reprocessPhotos.toString();
+    }
+
+    try {
+      final response = await this.api.put(url);
+      _handleNonSuccessStatus(response);
+    }
+    on DioError catch (e) {
+      _handleError(e);
+    }
+  }
+
+  Future clearCache() async {
+    final url = "${getApiUrl()}/settings/clearCache";
+
+    try {
+      final response = await this.api.put(url);
+      _handleNonSuccessStatus(response);
+    }
+    on DioError catch (e) {
+      _handleError(e);
+    }
+  }
+
   Future<bool> checkUsername(String username) async {
     final url = "${getApiUrl()}/auth/usernameCheck";
     final payload = json.encode({
@@ -244,6 +272,7 @@ class HomePhotosService {
 
     try {
       final response = await this.api.post(url, data: changeInfo.toJson());
+      _handleNonSuccessStatus(response);
       final tokens = Tokens.fromJson(response.data);
       return tokens;
     }

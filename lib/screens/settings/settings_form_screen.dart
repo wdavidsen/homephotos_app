@@ -3,6 +3,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:homephotos_app/components/error_retry_message.dart';
 import 'package:homephotos_app/components/loading_dialog.dart';
 import 'package:homephotos_app/components/main_nav_menu.dart';
+import 'package:homephotos_app/screens/settings/index_now_form_screen.dart';
 import 'package:homephotos_app/screens/settings/settings_form_bloc.dart';
 
 class SettingsFormScreen extends StatelessWidget {
@@ -128,15 +129,25 @@ class SettingsFormScreen extends StatelessWidget {
                                 children: <Widget>[
                                   RaisedButton(
                                     onPressed: loadingFormBloc.submit,
-                                    child: Text('Save Settings'),
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Save Settings',
+                                      style: TextStyle(
+                                          color: Colors.white
+                                      )
+                                    ),
                                   ),
                                   RaisedButton(
-                                    onPressed: loadingFormBloc.indexNow,
-                                    child: Text('Index Now'),
+                                    onPressed: () => {
+                                      Navigator.of(context).pushNamed("/index-now")
+                                    },
+                                    child: Text('Index Now...'),
                                   ),
                                   RaisedButton(
-                                    onPressed: loadingFormBloc.clearCache,
-                                    child: Text('Clear Cache'),
+                                    onPressed: () => {
+                                      Navigator.of(context).pushNamed("/clear-cache")
+                                    },
+                                    child: Text('Clear Cache...'),
                                   ),
                                 ]
                               )

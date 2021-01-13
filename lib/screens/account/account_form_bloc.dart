@@ -60,10 +60,6 @@ class AccountFormBloc extends FormBloc<String, String> {
     }
   }
 
-  void changePassword() {
-
-  }
-
   void logout() async {
     await _homePhotosService.logout();
     _navService.navigateToLogin();

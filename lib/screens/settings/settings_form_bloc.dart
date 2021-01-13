@@ -1,19 +1,48 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/settings.dart';
+import 'package:homephotos_app/screens/custom_field_bloc_validators.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
 
 class SettingsFormBloc extends FormBloc<String, String> {
   final HomePhotosService _homePhotosService = GetIt.I.get();
 
-  final photosFolder = TextFieldBloc();
-  final cacheFolder = TextFieldBloc();
-  final mobileUploadsFolder = TextFieldBloc();
+  final photosFolder = TextFieldBloc(
+    validators: [
+      CustomFieldBlocValidators.absolutePath,
+    ],
+  );
+  final cacheFolder = TextFieldBloc(
+    validators: [
+      CustomFieldBlocValidators.absolutePath,
+    ],
+  );
+  final mobileUploadsFolder = TextFieldBloc(
+    validators: [
+      CustomFieldBlocValidators.absolutePath,
+    ],
+  );
   final indexDateTime = InputFieldBloc<DateTime, Object>();
-  final indexFrequency = TextFieldBloc<int>();
-  final thumbPhotoSize = TextFieldBloc<int>();
-  final largePhotoSize = TextFieldBloc<int>();
-  final smallPhotoSize = TextFieldBloc<int>();
+  final indexFrequency = TextFieldBloc<int>(
+    validators: [
+      CustomFieldBlocValidators.integer,
+    ],
+  );
+  final thumbPhotoSize = TextFieldBloc<int>(
+    validators: [
+      CustomFieldBlocValidators.integer,
+    ],
+  );
+  final largePhotoSize = TextFieldBloc<int>(
+    validators: [
+      CustomFieldBlocValidators.integer,
+    ],
+  );
+  final smallPhotoSize = TextFieldBloc<int>(
+    validators: [
+      CustomFieldBlocValidators.integer,
+    ],
+  );
 
   final text = TextFieldBloc();
   final select = SelectFieldBloc<String, dynamic>();
@@ -78,11 +107,21 @@ class SettingsFormBloc extends FormBloc<String, String> {
     }
   }
 
-  void indexNow() {
-    print('indexing now');
+  void indexNow() async {
+    try {
+      await _homePhotosService.indexNow(false);
+    }
+    catch (e) {
+
+    }
   }
 
-  void clearCache() {
-    print('clearing cache');
+  void clearCache() async {
+    try {
+      await _homePhotosService.clearCache();
+    }
+    catch (e) {
+
+    }
   }
 }

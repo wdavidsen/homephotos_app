@@ -4,6 +4,7 @@ import 'package:homephotos_app/components/error_retry_message.dart';
 import 'package:homephotos_app/components/loading_dialog.dart';
 import 'package:homephotos_app/components/main_nav_menu.dart';
 import 'package:homephotos_app/screens/account/account_form_bloc.dart';
+import 'package:homephotos_app/screens/account/change_password_form_screen.dart';
 
 class AccountFormScreen extends StatelessWidget {
 
@@ -34,8 +35,6 @@ class AccountFormScreen extends StatelessWidget {
                 },
                 onSuccess: (context, state) {
                   LoadingDialog.hide(context);
-
-                  // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => SuccessScreen()));
                 },
                 onFailure: (context, state) {
                   LoadingDialog.hide(context);
@@ -83,11 +82,19 @@ class AccountFormScreen extends StatelessWidget {
                                   children: <Widget>[
                                     RaisedButton(
                                       onPressed: loadingFormBloc.submit,
-                                      child: Text('Save'),
+                                      color: Colors.blue,
+                                      child: Text(
+                                        'Save',
+                                        style: TextStyle(
+                                            color: Colors.white
+                                        )
+                                      ),
                                     ),
                                     RaisedButton(
-                                      onPressed: loadingFormBloc.changePassword,
-                                      child: Text('Change Password'),
+                                      onPressed: () => {
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChangePasswordFormScreen()))
+                                      },
+                                      child: Text('Change Password...'),
                                     ),
                                     RaisedButton(
                                       onPressed: loadingFormBloc.logout,

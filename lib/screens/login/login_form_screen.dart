@@ -25,7 +25,7 @@ class LoginFormScreen extends StatelessWidget {
               onSuccess: (context, state) {
                 LoadingDialog.hide(context);
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => SettingsFormScreen()));
+                Navigator.of(context).pushReplacementNamed("/settings");
               },
               onFailure: (context, state) {
                 LoadingDialog.hide(context);
