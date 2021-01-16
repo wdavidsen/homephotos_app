@@ -30,6 +30,7 @@ class UserSettingsService {
   Future updateCurrentServiceInfo(ServiceInfo serviceInfo) async {
     var settings = getSettings();
     settings.currentServiceUrl = serviceInfo.serviceUrl;
+    _userSettings = settings;
     await saveSettings(settings);
   }
 

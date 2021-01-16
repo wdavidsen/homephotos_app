@@ -101,12 +101,16 @@ class HomePhotosService {
   }
 
   String getApiUrl() {
-    if (this.apiUrl != null) {
+    if (this.apiUrl != null && this.apiUrl.isNotEmpty) {
       return this.apiUrl;
     }
     final settings =  _userSettingsService.getSettings();
-    this.apiUrl = "${settings.currentServiceUrl}/api";
-    
+
+    final baseUrl = settings.currentServiceUrl;
+    assert(baseUrl != null && baseUrl.isNotEmpty);
+
+    this.apiUrl = "${baseUrl}/api";
+
     return this.apiUrl;
   }
   

@@ -61,9 +61,10 @@ class LoginFormBloc extends FormBloc<String, String> {
   @override
   void onSubmitting() async {
     try {
+      await _userSettingsService.updateCurrentServiceInfo(services.value);
       var user = await _homePhotosService.login(username.value, password.value);
       await _userStore.setCurrentUser(user);
-      await _userSettingsService.updateCurrentServiceInfo(services.value);
+
       emitSuccess();
     }
     catch (ex) {
