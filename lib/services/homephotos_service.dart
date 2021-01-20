@@ -6,6 +6,7 @@ import 'package:homephotos_app/app_config.dart';
 import 'package:homephotos_app/models/account_info.dart';
 import 'package:homephotos_app/models/api_exception.dart';
 import 'package:homephotos_app/models/password_change.dart';
+import 'package:homephotos_app/models/password_user.dart';
 import 'package:homephotos_app/models/photo.dart';
 import 'package:homephotos_app/models/registration.dart';
 import 'package:homephotos_app/models/settings.dart';
@@ -61,7 +62,7 @@ class HomePhotosService {
 
     api.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
-          if (options.method == 'POST' || options.method == 'PUT') {
+          if (options.method == 'POST' || options.method == 'PUT' || options.method == 'DELETE') {
             var csrfCookie = _cookieStore.getCookie(XSRF_Token);
             var csrfRequestCookie = _cookieStore.getCookie(XSRF_Request_Token);
 
@@ -471,6 +472,7 @@ class HomePhotosService {
 
     try {
       final response = await this.api.get(url);
+      _handleNonSuccessStatus(response);
       final user = User.fromJson(response.data);
       return user;
     }
@@ -479,11 +481,12 @@ class HomePhotosService {
     }
   }
 
-  Future<User> userAdd(User user) async {
+  Future<User> userAdd(PasswordUser passwordUser) async {
     final url = "${getApiUrl()}/users";
 
     try {
-      final response = await this.api.post(url, data: user.toJson());
+      final response = await this.api.post(url, data: passwordUser.toJson());
+      _handleNonSuccessStatus(response);
       final u = User.fromJson(response.data);
       return u;
     }
@@ -493,10 +496,11 @@ class HomePhotosService {
   }
 
   Future<User> userUpdate(User user) async {
-    final url = "${getApiUrl()}/users";
+    final url = "${getApiUrl()}/users/${user.userId}";
 
     try {
       final response = await this.api.put(url, data: user.toJson());
+      _handleNonSuccessStatus(response);
       final u = User.fromJson(response.data);
       return u;
     }
@@ -509,7 +513,8 @@ class HomePhotosService {
     final url = "${getApiUrl()}/users/${userId}";
 
     try {
-      await this.api.delete(url);
+      final response = await this.api.delete(url);
+      _handleNonSuccessStatus(response);
     }
     on DioError catch (e) {
       _handleError(e);
@@ -521,12 +526,12 @@ class HomePhotosService {
 
     try {
       final response = await this.api.get(url);
-      List<Map<String, dynamic>> list = response.data;
-      var users = List<User>();
+      final users = List<User>();
 
-      list.forEach((element) {
-        users.add(User.fromJson(element));
+      response.data.forEach((user) => {
+        users.add(User.fromJson(user))
       });
+      return users;
     }
     on DioError catch (e) {
       _handleError(e);
@@ -535,12 +540,17 @@ class HomePhotosService {
 
   void _handleNonSuccessStatus(Response response) {
     if (response.statusCode > 299 || response.statusCode < 200) {
+      ApiException ex;
+
       try {
-        var ex = ApiException.fromJson(response.data);
-        throw ex;
+        ex = ApiException.fromJson(response.data);
       }
       catch (e) {
         throw Exception('Server returned error success code.');
+      }
+
+      if (ex != null) {
+        throw ex;
       }
     }
   }

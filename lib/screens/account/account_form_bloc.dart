@@ -11,7 +11,11 @@ class AccountFormBloc extends FormBloc<String, String> {
 
   AccountInfo _accountInfo;
 
-  final username = TextFieldBloc();
+  final username = TextFieldBloc(
+    validators: [
+      FieldBlocValidators.required,
+    ],
+  );
   final firstName = TextFieldBloc();
   final lastName = TextFieldBloc();
 
@@ -50,7 +54,7 @@ class AccountFormBloc extends FormBloc<String, String> {
       _accountInfo.lastName = lastName.value;
 
       await _homePhotosService.accountUpdate(_accountInfo);
-      emitSuccess();
+      emitSuccess(successResponse: "Account saved successfully");
     }
     on ApiException catch (e) {
       emitFailure(failureResponse: e.message);

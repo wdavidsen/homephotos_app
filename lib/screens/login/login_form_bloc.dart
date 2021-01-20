@@ -26,7 +26,7 @@ class LoginFormBloc extends FormBloc<String, String> {
     ],
   );
 
-  SelectFieldBloc<ServiceInfo, Object> services = SelectFieldBloc<ServiceInfo, Object>(
+  final services = SelectFieldBloc<ServiceInfo, Object>(
       items: []
   );
 

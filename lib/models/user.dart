@@ -22,7 +22,11 @@ class User {
     this.firstName,
     this.lastName,
     this.role
-  });
+  }) {
+    failedLoginCount = 0;
+    mustChangePassword = false;
+    enabled = false;
+  }
 
   User.fromJson(Map<String, dynamic> json)
     : userId = json['userId'],
@@ -30,7 +34,7 @@ class User {
       firstName = json['firstName'],
       lastName = json['lastName'],
       role = json['role'],
-      lastLogin = DateTime.parse(json['lastLogin']),
+      lastLogin = json['lastLogin'] != null ? DateTime.parse(json['lastLogin']) : null,
       jwt = json['jwt'],
       refreshToken = json['refreshToken'],
       failedLoginCount = json['failedLoginCount'],
@@ -46,7 +50,7 @@ class User {
         'firstName': firstName,
         'lastName': lastName,
         'role': role,
-        'lastLogin': lastLogin.toString(),
+        'lastLogin': lastLogin != null ? lastLogin.toString() : null,
         'jwt': jwt,
         'refreshToken': refreshToken,
         'failedLoginCount': failedLoginCount,
