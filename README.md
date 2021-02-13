@@ -1,6 +1,6 @@
-# Home Photos Mobile Client
+# HomePhotos Mobile Client
 
-A mobile client for the Home Photos server created with the Flutter framework. The plan is to support the same functionality the built-in Angular client has. This app is currently under construction and only half backed.
+A mobile client for the HomePhotos server created with the Flutter framework. The plan is to support the same functionality the built-in Angular client has. This app is currently under construction and only half backed.
 
 ## Features
 * Secure sign-in and registration
