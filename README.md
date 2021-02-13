@@ -1,16 +1,14 @@
-# homephotos_app
+# Home Photos Mobile Client
 
-Mobile client for ePhotoBox (Home Photos) server.
+A mobile client for the Home Photos server created with the Flutter framework. The plan is to support the same functionality the built-in Angular client has. This app is currently under construction and only half backed.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+* Secure sign-in and registration
+* Easily connect to multiple Home Photos servers
+* Server setup and administration
+* Endless photo scroll (pending)
+* Adjustable thumbnail sizes (pending)
+* Photo slideshow (pending)
+* Tag-based filtering (pending) 
+* Keyword search (pending)
+* Multi-image upload (pending)
