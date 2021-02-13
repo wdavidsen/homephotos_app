@@ -32,10 +32,16 @@ class UserStoreService {
   }
 
   Future updateTokens(Tokens tokens) async {
-    final user = await getCurrentUser();
-    await _secureStorage.write(_userKey, user.toJsonString());
     _currentUser.jwt = tokens.jwt;
     _currentUser.refreshToken = tokens.refreshToken;
+    await _secureStorage.write(_userKey, _currentUser.toJsonString());
+  }
+
+  Future updateContactInfo(String firstName, String lastName, String emailAddress) async {
+    _currentUser.firstName = firstName;
+    _currentUser.lastName = lastName;
+    _currentUser.emailAddress = emailAddress;
+    await _secureStorage.write(_userKey, _currentUser.toJsonString());
   }
 
   Tokens getTokens() {

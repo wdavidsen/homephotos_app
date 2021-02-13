@@ -131,7 +131,7 @@ class UserFormScreen extends StatelessWidget {
                                       ),
                                     ),
                                     RaisedButton(
-                                      onPressed: () => {},
+                                      onPressed: () => Navigator.of(context).pushNamed("/reset-password"),
                                       child: Text('Reset Password'),
                                     ),
                                   ]

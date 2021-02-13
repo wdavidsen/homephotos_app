@@ -1,5 +1,6 @@
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:homephotos_app/models/api_exception.dart';
 import 'package:homephotos_app/models/service_info.dart';
 import 'package:homephotos_app/screens/custom_field_bloc_validators.dart';
 import 'package:homephotos_app/services/homephotos_service.dart';
@@ -67,8 +68,11 @@ class LoginFormBloc extends FormBloc<String, String> {
 
       emitSuccess();
     }
+    on ApiException catch (e) {
+      emitFailure(failureResponse: e.message);
+    }
     catch (ex) {
-      emitFailure(failureResponse: 'Sign-in failed');
+      emitFailure(failureResponse: 'Unexpected error');
     }
   }
 }

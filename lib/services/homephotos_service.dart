@@ -6,6 +6,7 @@ import 'package:homephotos_app/app_config.dart';
 import 'package:homephotos_app/models/account_info.dart';
 import 'package:homephotos_app/models/api_exception.dart';
 import 'package:homephotos_app/models/password_change.dart';
+import 'package:homephotos_app/models/password_reset.dart';
 import 'package:homephotos_app/models/password_user.dart';
 import 'package:homephotos_app/models/photo.dart';
 import 'package:homephotos_app/models/registration.dart';
@@ -30,6 +31,7 @@ class HomePhotosService {
   final String XSRF_Token = '.AspNetCore.Antiforgery';
 
   String apiUrl = null;
+  String avatarUrl = null;
 
   HomePhotosService() {    
     api.interceptors.add(InterceptorsWrapper(
@@ -101,20 +103,35 @@ class HomePhotosService {
       ));
   }
 
-  String getApiUrl() {
-    if (this.apiUrl != null && this.apiUrl.isNotEmpty) {
-      return this.apiUrl;
-    }
+  String getBaseUrl() {
     final settings =  _userSettingsService.getSettings();
 
     final baseUrl = settings.currentServiceUrl;
     assert(baseUrl != null && baseUrl.isNotEmpty);
 
+    return baseUrl;
+  }
+
+  String getApiUrl() {
+    if (this.apiUrl != null && this.apiUrl.isNotEmpty) {
+      return this.apiUrl;
+    }
+    final baseUrl = getBaseUrl();
     this.apiUrl = "${baseUrl}/api";
 
     return this.apiUrl;
   }
-  
+
+  String getAvatarUrl() {
+    if (this.avatarUrl != null && this.avatarUrl.isNotEmpty) {
+      return this.avatarUrl;
+    }
+    final baseUrl = getBaseUrl();
+    this.avatarUrl = "${baseUrl}/avatar-image";
+
+    return this.avatarUrl;
+  }
+
   Future<bool> pingService(String serviceUrl) async {
     final url = "${serviceUrl}/ping";
 
@@ -181,6 +198,8 @@ class HomePhotosService {
 
     try {
       final response = await this.api.post(url, data: payload);
+      _handleNonSuccessStatus(response);
+
       final user = User.fromJson(response.data);
       await _userStore.setCurrentUser(user);
       return user;
@@ -277,6 +296,20 @@ class HomePhotosService {
 
     try {
       final response = await this.api.post(url, data: changeInfo.toJson());
+      _handleNonSuccessStatus(response);
+      final tokens = Tokens.fromJson(response.data);
+      return tokens;
+    }
+    on DioError catch (e) {
+      _handleError(e);
+    }
+  }
+
+  Future<Tokens> resetPassword(PasswordReset resetInfo) async {
+    final url = "${getApiUrl()}/user/resetPassword";
+
+    try {
+      final response = await this.api.post(url, data: resetInfo.toJson());
       _handleNonSuccessStatus(response);
       final tokens = Tokens.fromJson(response.data);
       return tokens;

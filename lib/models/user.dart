@@ -7,6 +7,8 @@ class User {
   String username;
   String firstName;
   String lastName;
+  String emailAddress;
+  String avatarImage;
   String role;
 
   String jwt;
@@ -21,6 +23,8 @@ class User {
     this.userId,
     this.firstName,
     this.lastName,
+    this.emailAddress,
+    this.avatarImage,
     this.role
   }) {
     failedLoginCount = 0;
@@ -33,6 +37,8 @@ class User {
       username = json['username'],
       firstName = json['firstName'],
       lastName = json['lastName'],
+      emailAddress = json['emailAddress'],
+      avatarImage = json['avatarImage'],
       role = json['role'],
       lastLogin = json['lastLogin'] != null ? DateTime.parse(json['lastLogin']) : null,
       jwt = json['jwt'],
@@ -49,6 +55,8 @@ class User {
         'username': username,
         'firstName': firstName,
         'lastName': lastName,
+        'emailAddress': emailAddress,
+        'avatarImage': avatarImage,
         'role': role,
         'lastLogin': lastLogin != null ? lastLogin.toString() : null,
         'jwt': jwt,

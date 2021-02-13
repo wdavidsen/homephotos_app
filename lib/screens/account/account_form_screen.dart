@@ -77,6 +77,12 @@ class AccountFormScreen extends StatelessWidget {
                                   labelText: 'Last name',
                                 ),
                               ),
+                              TextFieldBlocBuilder(
+                                textFieldBloc: loadingFormBloc.emailAddress,
+                                decoration: InputDecoration(
+                                  labelText: 'Email address',
+                                ),
+                              ),
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[

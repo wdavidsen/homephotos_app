@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:homephotos_app/models/user.dart';
+import 'package:homephotos_app/services/homephotos_service.dart';
 import 'package:homephotos_app/services/user_store_service.dart';
 
 class MainNavMenu {
@@ -9,14 +10,15 @@ class MainNavMenu {
   static Widget build(BuildContext context) {
     final UserStoreService _userStore = GetIt.I.get();
     final user = _userStore.getCurrentUser();
+    final HomePhotosService _homePhotosService = GetIt.I.get();
 
     return ListView(
         padding: EdgeInsets.all(0.0),
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text('${user.firstName} ${user.lastName}'),
-            accountEmail: Text('${user.firstName}.${user.lastName}@gmail.com'),
-            currentAccountPicture: CircleAvatar(backgroundImage: ExactAssetImage('assets/img/logo-sm.png'),
+            accountEmail: Text(user.emailAddress ?? ''),
+            currentAccountPicture: CircleAvatar(backgroundImage: NetworkImage('${_homePhotosService.getAvatarUrl()}/${user.avatarImage}'),
             ),
             //
             // otherAccountsPictures: <Widget>[

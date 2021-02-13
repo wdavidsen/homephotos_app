@@ -1,5 +1,5 @@
 class ApiException implements Exception {
-  int id;
+  String id;
   String message;
 
   ApiException.fromJson(Map<String, dynamic> json)
