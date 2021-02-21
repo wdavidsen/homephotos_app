@@ -30,8 +30,7 @@ class HomePhotosService {
   final String XSRF_Request_Token = 'XSRF-REQUEST-TOKEN';
   final String XSRF_Token = '.AspNetCore.Antiforgery';
 
-  String apiUrl = null;
-  String avatarUrl = null;
+  String baseUrl = null;
 
   HomePhotosService() {    
     api.interceptors.add(InterceptorsWrapper(
@@ -104,6 +103,9 @@ class HomePhotosService {
   }
 
   String getBaseUrl() {
+    if (this.baseUrl != null && this.baseUrl.isNotEmpty) {
+      return this.baseUrl;
+    }
     final settings =  _userSettingsService.getSettings();
 
     final baseUrl = settings.currentServiceUrl;
@@ -113,23 +115,15 @@ class HomePhotosService {
   }
 
   String getApiUrl() {
-    if (this.apiUrl != null && this.apiUrl.isNotEmpty) {
-      return this.apiUrl;
-    }
-    final baseUrl = getBaseUrl();
-    this.apiUrl = "${baseUrl}/api";
+    return "${getBaseUrl()}/api";
+  }
 
-    return this.apiUrl;
+  String getPhotoUrl() {
+    return "${getBaseUrl()}/photo-image";
   }
 
   String getAvatarUrl() {
-    if (this.avatarUrl != null && this.avatarUrl.isNotEmpty) {
-      return this.avatarUrl;
-    }
-    final baseUrl = getBaseUrl();
-    this.avatarUrl = "${baseUrl}/avatar-image";
-
-    return this.avatarUrl;
+    return "${getBaseUrl()}/avatar-image";
   }
 
   Future<bool> pingService(String serviceUrl) async {
@@ -351,8 +345,12 @@ class HomePhotosService {
 
     try {
       final response = await this.api.get(url);
-      // todo: add deserialization
-      return null;
+      final photos = List<Photo>();
+
+      response.data.forEach((photo) => {
+        photos.add(Photo.fromJson(photo))
+      });
+      return photos;
     }
     on DioError catch (e) {
       _handleError(e);
@@ -364,8 +362,12 @@ class HomePhotosService {
 
     try {
       final response = await this.api.get(url);
-      // todo: add deserialization
-      return null;
+      final photos = List<Photo>();
+
+      response.data.forEach((photo) => {
+        photos.add(Photo.fromJson(photo))
+      });
+      return photos;
     }
     on DioError catch (e) {
       _handleError(e);
@@ -377,8 +379,12 @@ class HomePhotosService {
 
     try {
       final response = await this.api.get(url);
-      // todo: add deserialization
-      return null;
+      final photos = List<Photo>();
+
+      response.data.forEach((photo) => {
+        photos.add(Photo.fromJson(photo))
+      });
+      return photos;
     }
     on DioError catch (e) {
       _handleError(e);
@@ -440,8 +446,12 @@ class HomePhotosService {
 
     try {
       final response = await this.api.get(url);
-      // todo: add deserialization
-      return null;
+      final tags = List<Tag>();
+
+      response.data.forEach((tag) => {
+        tags.add(Tag.fromJson(tag))
+      });
+      return tags;
     }
     on DioError catch (e) {
       _handleError(e);

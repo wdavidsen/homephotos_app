@@ -16,7 +16,7 @@ class Photo {
 
   Photo.fromJson(Map<String, dynamic> json)
     : photoId = json['photoId'],
-      dateTaken = json['dateTaken'],
+      dateTaken = DateTime.parse(json['dateTaken']),
       cacheFolder = json['cacheFolder'],
       fileName = json['fileName'],
       imageWidth = json['imageWidth'],
